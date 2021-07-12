@@ -22,9 +22,21 @@
 
   <style>
 
-    /*
-      misc styles, nothing to do with CSS variables
-    */
+    :root {
+      --base: #ffc600;
+      --blur: 10px;
+      --spacing: 10px;
+    }
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
 
     body {
       text-align: center;
@@ -45,6 +57,22 @@
   </style>
 
   <script>
+
+    const root = document.querySelector(':root')
+    const [spacingControl, blurControl, baseControl] = document.querySelectorAll('input')
+
+    const handler = ({target}) => root.style.setProperty(`--${target.name}`, `${target.value}px`)
+
+    spacingControl.addEventListener('change', handler)
+    spacingControl.addEventListener('mousemove', handler)
+
+    blurControl.addEventListener('change', handler)
+    blurControl.addEventListener('mousemove', handler)
+
+    baseControl.addEventListener('change', ({target}) => {
+      root.style.setProperty('--base', target.value)
+    })
+
   </script>
 
 </body>
