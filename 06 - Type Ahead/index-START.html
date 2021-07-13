@@ -17,6 +17,34 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+const inputField = document.querySelector('input.search')
+const ul = document.querySelector('ul.suggestions')
+
+const cities = []
+fetch(endpoint)
+.then(res => res.json())
+.then(data => cities.push(...data))
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function findCities(e) {
+  ul.innerHTML = ''
+  const regx = new RegExp(inputField.value, 'gi')
+  const highlight = `<span class="hl">${inputField.value}</span>`
+  const list = cities.filter(place => place.city.match(regx) || place.state.match(regx)).slice(0,20)
+  list.forEach(place => {
+    ul.innerHTML +=
+    `<li>
+      <span class="name">${place.city.replace(regx, highlight)}, ${place.state.replace(regx, highlight)}</span>
+      <span class="population">${numberWithCommas(place.population)}</span>
+    </li>`
+  })
+}
+
+inputField.addEventListener('keyup', findCities)
+
 </script>
 </body>
 </html>
